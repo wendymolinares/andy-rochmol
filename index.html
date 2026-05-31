@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/andy-rochmol/">
+<!-- BASE:END -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+
+
+<!-- SEO Meta Tags -->
+<title>Landing Page - Apr 2, 2026</title>
+<meta property="og:title" content="Landing Page - Apr 2, 2026" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Landing Page - Apr 2, 2026" />
+<!-- End SEO Meta Tags -->
+
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=2973');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='ip5TXN9bk';
+  var apiBase='https://paymegpt.com';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Andy <span>Rochmol</span></a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#listen">Listen</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#fanzone">Fan Zone</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-image">[ editorial photo ]</div>
+  <div class="hero-content">
+    <p class="descriptor">Pianist & Composer</p>
+    <h1>Andy<br><em>Rochmol</em></h1>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <p class="section-label">About</p>
+      <p>Andy Rochmol is an 11-year-old pianist and composer whose artistic voice moves fluently between classical repertoire, original composition, and crossover performance. Fluent in English and Spanish, with early studies in German, he connects with audiences across the United States, Latin America, and beyond.</p>
+      <p>Andy began exploring music at two and made his stage debut as a drummer at three. At five, he composed his first original piece — "Papá Cielo" — written to comfort his father. His teachers have consistently remarked on his ability to absorb and implement corrections at the piano with unusual depth, often reshaping a passage after a single note. That same drive to create has led him to teach himself to read and write in alto clef and to transpose for instruments such as the French horn and clarinet — skills most young musicians encounter much later, if at all. In 2024, that curiosity took shape in his first string quartet, recorded by professional musicians from Bellas Artes in Mexico City.</p>
+      <p>In December 2025, Andy premiered the first movement of his original symphony in New York City. The full recording was completed in April 2026 and is currently being mixed in Spain — his most ambitious work to date. New York also gave him something he didn't expect: he walked into Carnegie Hall for the first time, and it became the stage he dreams of. His growing presence in the professional world has drawn support from names like Fazioli, who backed his attendance at NAMM 2026, and Studiologic, who recognized his artistry by providing him with one of their flagship instruments — a keyboard that bridges the feel of a concert piano with the expressive range a jazz and contemporary performer needs.</p>
+      <p>Andy currently studies with Mauricio Náder, concert pianist at Bellas Artes in Mexico. During the summer of 2025, he attended the Musicians Institute Summer Shot in Los Angeles on a full scholarship, the Kutztown Summer Music Festival in Pennsylvania, and the Piano Seminar at the Music Society of San Miguel de Allende — working closely with world-class faculty including Sean Kennard (Steinway Artist), Gile Bae (Steinway Artist), Maria Asteriadou (Manhattan School of Music), and Dr. Daniel Immel.</p>
+
+      <div class="pullquote">
+        <p>"Andy is an exceptional case. His musicality, interpretive maturity, and creative capacity at such a young age are simply admirable."</p>
+        <cite>— Mauricio Náder, Concert Pianist, Bellas Artes México</cite>
+      </div>
+    </div>
+    <div class="about-image">[ portrait photo ]</div>
+  </div>
+</section>
+
+<!-- LISTEN -->
+<section class="listen" id="listen">
+  <p class="section-label">Listen</p>
+  <h2 class="section-title">Compositions & Recordings</h2>
+  <div class="listen-grid">
+    <div class="listen-card">
+      <div class="cover">
+        <div class="play-icon"></div>
+      </div>
+      <div class="info">
+        <h3>Symphony No. 1</h3>
+        <p>Premiered in New York City, December 2025. Currently in mixing — Spain, 2026.</p>
+        <span class="tag">Original Composition</span>
+      </div>
+    </div>
+    <div class="listen-card">
+      <div class="cover">
+        <div class="play-icon"></div>
+      </div>
+      <div class="info">
+        <h3>String Quartet No. 1</h3>
+        <p>Composed at age 9. Recorded by musicians from Bellas Artes, Mexico City.</p>
+        <span class="tag">Chamber Music</span>
+      </div>
+    </div>
+    <div class="listen-card">
+      <div class="cover">
+        <div class="play-icon"></div>
+      </div>
+      <div class="info">
+        <h3>Papá Cielo</h3>
+        <p>First original composition, written at age five.</p>
+        <span class="tag">Solo Piano</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section class="videos" id="videos">
+  <p class="section-label">Videos</p>
+  <h2 class="section-title">See Andy Perform</h2>
+  <div class="videos-grid">
+    <div class="video-card">
+      <div class="thumb">
+        <div class="play-icon"></div>
+      </div>
+      <div class="caption">
+        <h3>Classical Performance</h3>
+        <p>Selected repertoire — to be confirmed</p>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="thumb">
+        <div class="play-icon"></div>
+      </div>
+      <div class="caption">
+        <h3>Original Composition</h3>
+        <p>String Quartet or Symphony excerpt</p>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="thumb">
+        <div class="play-icon"></div>
+      </div>
+      <div class="caption">
+        <h3>Crossover Performance</h3>
+        <p>Jazz arrangement or Rockin' Jazz set</p>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="thumb">
+        <div class="play-icon"></div>
+      </div>
+      <div class="caption">
+        <h3>A Moment of Andy</h3>
+        <p>Perfect pitch, personality, the spark</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAN ZONE -->
+<section class="fanzone" id="fanzone">
+  <p class="section-label">Fan Zone</p>
+  <h2 class="section-title">Say Hello</h2>
+  <p class="fanzone-intro">"Want to tell me something? Send me a note, a drawing, or just say hi. I love hearing from you."</p>
+  <div class="fanzone-form">
+    <label for="fan-name">Your name</label>
+    <input type="text" id="fan-name" placeholder="What's your name?">
+    <label for="fan-message">Your message</label>
+    <textarea id="fan-message" placeholder="Write something nice, share an idea, or just say hello..."></textarea>
+    <button type="button">Send to Andy</button>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title" style="margin-left:auto;margin-right:auto;">Get in Touch</h2>
+  <div class="contact-grid">
+    <div class="contact-col">
+      <h3>Booking & Performances</h3>
+      <a href="mailto:andy@andyrochmol.com">andy@andyrochmol.com</a>
+    </div>
+    <div class="contact-col">
+      <h3>Press & Media</h3>
+      <a href="mailto:andy@andyrochmol.com">andy@andyrochmol.com</a>
+    </div>
+    <div class="contact-col">
+      <h3>General Inquiries</h3>
+      <a href="mailto:andy@andyrochmol.com">andy@andyrochmol.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<div class="footer-sponsors">
+  <p>Supported by <span>Studiologic</span> · <span>Fazioli</span> · <span>Mauricio Náder</span></p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    © 2026 Andy Rochmol. All rights reserved.
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/andy.rochmol" target="_blank">Instagram</a>
+    <a href="https://www.youtube.com/@AndyRochMol" target="_blank">YouTube</a>
+    <a href="https://www.tiktok.com/@andy.rochmol" target="_blank">TikTok</a>
+    <a href="https://www.facebook.com/Andy.Rochmol" target="_blank">Facebook</a>
+  </div>
+</footer>
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>
